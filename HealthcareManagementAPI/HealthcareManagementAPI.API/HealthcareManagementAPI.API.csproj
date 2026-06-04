@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\HealthcareManagementAPI.Business\HealthcareManagementAPI.Business.csproj" />
     <ProjectReference Include="..\HealthcareManagementAPI.Models\HealthcareManagementAPI.Models.csproj" />
   </ItemGroup>
