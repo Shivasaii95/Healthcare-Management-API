@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using HealthcareManagementAPI.Models.DTOs.Patient;
+using HealthcareManagementAPI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,9 @@ namespace HealthcareManagementAPI.Business.Helpers
     {
         public ApplicationMapper()
         {
-            
+            CreateMap<CreatePatientRequestDto, Patient>().ReverseMap();
+
+            CreateMap<Patient, PatientResponseDto>().ReverseMap();
         }
     }
 }

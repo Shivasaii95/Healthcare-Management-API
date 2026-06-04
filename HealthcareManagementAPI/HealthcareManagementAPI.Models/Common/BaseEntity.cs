@@ -8,7 +8,7 @@ namespace HealthcareManagementAPI.Models.Common
 {
     public class BaseEntity
     {
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedDate { get; set; }
 
