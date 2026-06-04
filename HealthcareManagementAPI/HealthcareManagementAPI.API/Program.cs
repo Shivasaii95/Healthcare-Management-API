@@ -1,4 +1,6 @@
+using AutoMapper;
 using HealthcareManagementAPI.Business.contracts;
+using HealthcareManagementAPI.Business.Helpers;
 using HealthcareManagementAPI.Business.Implementation;
 using HealthcareManagementAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+
+builder.Services.AddAutoMapper(typeof(ApplicationMapper));
 
 var app = builder.Build();
 
