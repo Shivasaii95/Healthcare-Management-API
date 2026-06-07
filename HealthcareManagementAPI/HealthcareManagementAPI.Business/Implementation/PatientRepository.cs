@@ -2,12 +2,6 @@
 using HealthcareManagementAPI.DataAccess;
 using HealthcareManagementAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthcareManagementAPI.Business.Implementation
 {
@@ -32,6 +26,12 @@ namespace HealthcareManagementAPI.Business.Implementation
                                                 x.PatientId == id && !x.IsDeleted);
         }
 
+        public async Task<bool> IsPatientExistsAsync(string firstName,string lastName,DateTime dateOfBirth)
+        {
+            var isExist = await _context.Patients.AnyAsync(x => !x.IsDeleted && x.FirstName == firstName
+                                                                  && x.LastName == lastName && x.DateOfBirth == dateOfBirth);
+            return isExist;
+        }
 
         public async Task<Patient> CreatePatientAsync(Patient patient)
         {
@@ -40,6 +40,22 @@ namespace HealthcareManagementAPI.Business.Implementation
             await _context.SaveChangesAsync();
 
             return patient;
+        }
+
+        public async Task  UpdatePatientAsync(Patient patient)
+        {
+            patient.UpdatedDate = DateTime.UtcNow;
+            _context.Patients.Update(patient);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePatientAsync(Patient patient)
+        {
+            patient.IsDeleted = true;
+
+            patient.UpdatedDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -16,6 +16,8 @@ namespace HealthcareManagementAPI.Business.Helpers
             CreateMap<CreatePatientRequestDto, Patient>().ReverseMap();
 
             CreateMap<Patient, PatientResponseDto>().ReverseMap();
+
+            CreateMap<UpdatePatientRequestDto, Patient>().ReverseMap();
         }
     }
 }
