@@ -36,6 +36,8 @@ namespace HealthcareManagementAPI.API.Controllers
                 });
             }
 
+            var Response = _mapper.Map<List<PatientResponseDto>>(patients);
+
             return Ok(new
             {
                 message = "patient data retrived successfully",
@@ -64,13 +66,67 @@ namespace HealthcareManagementAPI.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPatient(CreatePatientRequestDto request)
         {
-            var patient = _mapper.Map<Patient>(request);
+            var patientExists = await _patientRepository.IsPatientExistsAsync(request.FirstName,request.LastName,request.DateOfBirth);
+
+            if (patientExists)
+            {
+                return BadRequest(new
+                {
+                    message = "Patient already exists."
+                });
+            }
+
+            var patient = _mapper.Map < Patient>(request);
 
             var createPatient = await _patientRepository.CreatePatientAsync(patient);
 
             var response = _mapper.Map<PatientResponseDto>(createPatient);
 
             return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult>UpdatePatient(int id,UpdatePatientRequestDto request)
+        {
+            var existingPatient= await _patientRepository.GetPatientById(id);
+
+
+            if (existingPatient == null)
+            {
+                return NotFound(new
+                {
+                    Message = "Patient not found"
+                });
+            }
+
+            _mapper.Map(request, existingPatient);
+
+            await _patientRepository.UpdatePatientAsync(existingPatient);
+
+            var response = _mapper.Map<PatientResponseDto>(existingPatient);
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePatient(int id)
+        {
+            var patient = await _patientRepository.GetPatientById(id);
+
+            if (patient == null)
+            {
+                return NotFound(new
+                {
+                    Message = "Patient not found"
+                });
+            }
+
+            await _patientRepository.DeletePatientAsync(patient);
+
+            return Ok(new
+            {
+                Message = "Patient deleted successfully"
+            });
         }
     }
 }
